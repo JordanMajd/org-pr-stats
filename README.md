@@ -1,5 +1,7 @@
 # Org PR Stats
 
+[![Build Status](https://travis-ci.org/JordanMajd/org-pr-stats.svg?branch=master)](https://travis-ci.org/JordanMajd/org-pr-stats)
+
 Org PR Stats is an node app to query the GitHub API for pull request stats on a given organization. It was created as a solution to a take home interview question.
 
 ## Getting started
