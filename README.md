@@ -14,15 +14,19 @@ There are two ways to run the application, directly on your machine or in a dock
   - Copy the example `.env` file: `cp .env.example .env`
   - Change `.env`'s contents from `GH_ORG="servo"` to `GH_ORG="<YOUR ORG HERE>"`.
 
+### Direct
+
 To run the application directly on your machine, ensure it is set up for [Node.js][node] development.
 
-1. Install the dependencies `npm install`
-1. Run the application `npm start`
+1. Install the dependencies: `npm install`
+1. Run the application: `npm start`
+
+### Docker
 
 If you prefer to use docker, getting started is fairly straight forward.
 
-1. Build the docker image `npm run build-docker`
-1. Run the container `npm run start-docker`
+1. Build the docker image: `npm run build-docker`
+1. Run the container: `npm run start-docker`
 
 Depending on your user permissions, you may need to run the docker commands with `sudo`.
 
