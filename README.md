@@ -1,6 +1,6 @@
 # Org PR Stats
 
-Org PR Stats is an application which queries the Github API for pull request information for a given organization. It was created as a solution to a take home interview question.
+Org PR Stats is an node app to query the GitHub API for pull request stats on a given organization. It was created as a solution to a take home interview question.
 
 ## Getting started
 
