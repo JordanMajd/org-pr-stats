@@ -1,0 +1,21 @@
+{
+  "name": "org-stats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "start": "node index.js",
+    "build-docker": "docker build -t org-pr-stats .",
+    "start-docker": "docker run -p 8080:8080 org-pr-stats"
+  },
+  "author": "Jordan Majd",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0"
+  }
+}
