@@ -17,12 +17,15 @@ function GHClient(){
   };
 }
 
+// Returns a promise with the item
 GHClient.prototype.get = function(uri){
   let opts = Object.assign({}, this.opts);
   opts.uri += uri;
   return rp(opts);
 };
 
+
+// Returns a promise with an array of the paginated results
 GHClient.prototype.getPaginated = function(uri, itemCount, perPage){
 
   if(perPage === undefined){
