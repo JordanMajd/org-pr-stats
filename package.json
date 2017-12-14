@@ -4,7 +4,7 @@
   "description": "Org PR Stats is an node app to query the GitHub API for pull request stats on a given organization. It was created as a solution to a take home interview question.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha",
+    "test": "./node_modules/.bin/mocha --recursive",
     "start": "node index.js",
     "build-docker": "docker build -t org-pr-stats .",
     "start-docker": "docker run -p 8080:8080 org-pr-stats"
@@ -16,6 +16,9 @@
     "mocha": "^4.0.1"
   },
   "dependencies": {
-    "dotenv": "^4.0.0"
+    "bluebird": "^3.5.1",
+    "dotenv": "^4.0.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
   }
 }
