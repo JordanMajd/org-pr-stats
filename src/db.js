@@ -7,7 +7,7 @@ function DB(){
   this.data = {};
 }
 
-// Return true if successfully stores, else false.
+// Return key if successfully stores, else undefined.
 DB.prototype.store = function(type, item){
 
   if(item !== undefined && item.id !== undefined && type !== undefined){
@@ -18,11 +18,7 @@ DB.prototype.store = function(type, item){
 
     this.data[type][item.id] = item;
 
-    return true;
-
-  } else {
-
-    return false;
+    return item.id;
   }
 }
 

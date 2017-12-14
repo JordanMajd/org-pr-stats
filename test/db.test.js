@@ -14,16 +14,16 @@ function storeSpec(){
 
   let cache = new DB();
 
-  it('returns false if type is undefined', function(){
-    expect(cache.store()).to.be.false;
+  it('returns undefined if type is undefined', function(){
+    expect(cache.store()).to.be.undefined;
   });
 
-  it('returns false if item is undefined', function(){
-    expect(cache.store('stuff')).to.be.false;
+  it('returns undefined if item is undefined', function(){
+    expect(cache.store('stuff')).to.be.undefined;
   });
 
-  it('returns false if item.id is undefined', function(){
-    expect(cache.store('stuff', {})).to.be.false;
+  it('returns undefined if item.id is undefined', function(){
+    expect(cache.store('stuff', {})).to.be.undefined;
   });
 
   it('does not create type or store item if fails', function(){
@@ -36,8 +36,8 @@ function storeSpec(){
   });
 
   let cow = { id: 'cow'}
-  it('returns true if item is stored', function(){
-    expect(cache.store('stuff', cow)).to.be.true;
+  it('returns key if item is stored', function(){
+    expect(cache.store('stuff', cow)).to.equal('cow');
   });
 
   it('stores item successfully', function(){
