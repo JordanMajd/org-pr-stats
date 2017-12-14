@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/JordanMajd/org-pr-stats.svg?branch=master)](https://travis-ci.org/JordanMajd/org-pr-stats)
 
-Org PR Stats is an node app to query the GitHub API for pull request stats on a given organization. It was created as a solution to a take home interview question.
+Org PR Stats is an node app to query the [GitHub API][gh] for pull request stats on a given organization. It was created as a solution to a take home interview question.
 
 ## Getting started
 
@@ -13,6 +13,7 @@ There are two ways to run the application, directly on your machine or in a dock
 1. Set up a `.env` file with the name of the github organization to query.
   - Copy the example `.env` file: `cp .env.example .env`
   - Change `.env`'s contents from `GH_ORG="servo"` to `GH_ORG="<YOUR ORG HERE>"`.
+  - Change `.env`'s user from `GH_USER="octocat"` to `GH_USER="<YOUR USER NAME HERE>"`.
 
 ### Direct
 
@@ -41,3 +42,4 @@ To run the unit tests use the command `npm test`.
 - MIT, see [LICENSE](/LICENSE) for more details.
 
 [node]: https://nodejs.org/en/
+[gh]: https://developer.github.com/v3/
