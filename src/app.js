@@ -9,6 +9,7 @@ require('dotenv').config();
 const Promise = require('bluebird');
 const DB = require('./db');
 const GHClient = require('./ghclient');
+const flatten = require('./util').flatten;
 
 
 /* Exports */
@@ -21,7 +22,6 @@ let orgName = process.env.GH_ORG;
 client.get('orgs/' + orgName)
   .then(getReposForOrg)
   .then(getPullsForRepos)
-  .then(getPullsFromRepos)
   .then(getPullCount)
   .catch(handleErr);
 
@@ -36,35 +36,22 @@ function getPullsForRepos(repos){
 
     db.store('repo', repo);
 
-    let uri = 'repos/' + orgName + '/' + repo.name + '/pulls' + '?state=all';
+    let uri = 'repos/' + orgName + '/' + repo.name + '/pulls';
 
-    return client.getPaginated(uri).then(function(data){
-      return [].concat.apply([], data);
+    return client.getPaginated(uri, '&state=all').then(function(pulls){
+      pulls = flatten(pulls);
+      pulls.forEach(function(pull){
+        db.store('pull', pull);
+      });
     });
   });
 }
 
-function storePulls(pulls){
-
-  return new Promise(function(reject, resolve){
-
-    pulls.forEach(function(pull){
-      db.store('pull', pull);
-    });
-
-    resolve();
-  });
-}
-
-function getPullCount(){
+function getPullCount(pulls){
   console.log('There are ' + db.count('pull') + ' pull requests for ' + orgName);
 }
 
 function handleErr(err){
+  console.error('Something went wrong:');
   console.error(err);
 }
-
-
-// get repos for org
-// get top pr # for repo
-// batch

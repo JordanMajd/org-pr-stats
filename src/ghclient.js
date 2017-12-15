@@ -3,6 +3,7 @@
 /* Imports */
 const rp = require('request-promise');
 const Promise = require('bluebird');
+const flatten = require('./util').flatten;
 
 /* Exports */
 module.exports = GHClient;
@@ -27,40 +28,53 @@ GHClient.prototype.get = function(uri){
 
 
 // Returns a promise with an array of the paginated results
-GHClient.prototype.getPaginated = function(uri, perPage){
+GHClient.prototype.getPaginated = function(uri, arg){
 
-  if(perPage === undefined){
-    perPage = 100;
+  let perPage = 100;
+
+  if(arg === undefined){
+    arg = '';
   }
 
   //  arrow function to bind this to GHClient
-  return this.head(uri).then((res) => {
+  return this.head(uri, arg).then((res) => {
+
 
     // get number of pages
-    let pageCount = this.getLastPage(res.headers.link);
-    console.log(pageCount);
-    let uris = [];
+    // if link is undefined, assume 1 page
+    let pageCount = 1;
+    console.log(res.headers.link);
+    if(res.headers.link !== undefined){
+      pageCount = this.getLastPage(res.headers.link);
+    }
+
+    let promises = [];
+    let pullRequests = [];
 
     // Start at page 1, pageCount is inclusive.
     for(let i = 1; i <= pageCount; i++){
-      uris.push(uri + '?page=' + i + '&per_page=' + perPage);
+
+      let path = uri + '?page=' + i + '&per_page=' + perPage + arg;
+
+      let chain = this.get(path).then(function(pulls){
+        pullRequests.push(pulls);
+      });
+
+      promises.push(chain);
     }
 
-    // arrow function to bind this to GHClient
-    // bulk request all pages
-    return Promise.map(uris, (uri) => {
-      return this.get(uri);
-    }).then(function(data){
-      // flatten array of arrays to single array
-      return [].concat.apply([], data);
+    return Promise.all(promises).then(function(){
+      return flatten(pullRequests);
     });
   });
 };
 
-GHClient.prototype.head = function(uri){
+GHClient.prototype.head = function(uri, arg){
   let opts = Object.assign({}, this.opts);
-  opts.uri += uri;
+  opts.uri += uri + '?per_page=100' + arg;
   opts.resolveWithFullResponse = true
+  console.log('head');
+  console.log(opts.uri);
   return rp.head(opts);
 };
 

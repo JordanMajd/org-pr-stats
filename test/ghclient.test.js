@@ -9,9 +9,9 @@ const GHClient = require('../src/ghclient');
 
 describe('Resource', function(){
 
-  //describe('get', getSpec);
-  //describe('getPaginated', getPaginatedSpec);
-  describe('getLastPage', getLastPageSpec);
+//  describe('get', getSpec);
+  describe('getPaginated', getPaginatedSpec);
+  //describe('getLastPage', getLastPageSpec);
   //describe('head', headSpec);
 });
 
@@ -33,7 +33,8 @@ function getPaginatedSpec(){
   let client = new GHClient();
 
   it('It fetches n resources by page', function(){
-
+    this.timeout(15000);
+    
     return client.getPaginated('orgs/servo/repos').then(function(data){
       expect(data.length).to.be.gt(100);
     });
