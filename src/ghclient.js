@@ -27,29 +27,34 @@ GHClient.prototype.get = function(uri){
 
 
 // Returns a promise with an array of the paginated results
-GHClient.prototype.getPaginated = function(uri, itemCount, perPage){
+GHClient.prototype.getPaginated = function(uri, perPage){
 
   if(perPage === undefined){
     perPage = 100;
   }
 
-  // events and a few other endpoints only support
-  let pageCount = Math.ceil(itemCount / perPage);
+  //  arrow function to bind this to GHClient
+  return this.head(uri).then((res) => {
 
-  let uris = [];
+    // get number of pages
+    let pageCount = this.getLastPage(res.headers.link);
+    console.log(pageCount);
+    let uris = [];
 
-  // Start at page 1, pageCount is inclusive.
-  for(let i = 1; i <= pageCount; i++){
-    uris.push(uri + '?page=' + i + '&per_page=' + perPage);
-  }
+    // Start at page 1, pageCount is inclusive.
+    for(let i = 1; i <= pageCount; i++){
+      uris.push(uri + '?page=' + i + '&per_page=' + perPage);
+    }
 
-  // arrow function to bind this to GHClient
-  return Promise.map(uris, (uri) => {
-    return this.get(uri);
-  }).then(function(data){
-    return [].concat.apply([], data);
+    // arrow function to bind this to GHClient
+    // bulk request all pages
+    return Promise.map(uris, (uri) => {
+      return this.get(uri);
+    }).then(function(data){
+      // flatten array of arrays to single array
+      return [].concat.apply([], data);
+    });
   });
-
 };
 
 GHClient.prototype.head = function(uri){
@@ -57,4 +62,12 @@ GHClient.prototype.head = function(uri){
   opts.uri += uri;
   opts.resolveWithFullResponse = true
   return rp.head(opts);
-}
+};
+
+GHClient.prototype.getLastPage = function(link){
+  // search link header for last page
+  let last = link.split(',')[1];
+  let page = last.match(/(\?|&)page=(\d+)/g)[0];
+  let numStr = page.split('=')[1];
+  return parseInt(numStr, 10);
+};
