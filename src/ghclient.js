@@ -51,3 +51,10 @@ GHClient.prototype.getPaginated = function(uri, itemCount, perPage){
   });
 
 };
+
+GHClient.prototype.head = function(uri){
+  let opts = Object.assign({}, this.opts);
+  opts.uri += uri;
+  opts.resolveWithFullResponse = true
+  return rp.head(opts);
+}

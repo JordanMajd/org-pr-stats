@@ -8,7 +8,7 @@ const expect = require('chai').expect;
 const GHClient = require('../src/ghclient');
 
 describe('Resource', function(){
-
+   
   describe('get', getSpec);
   describe('getPaginated', getPaginatedSpec);
 

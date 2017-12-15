@@ -28,3 +28,10 @@ DB.prototype.fetch = function(type, id){
     return this.data[type][id];
   }
 }
+
+// Return number of items of given type, undefined if type does not exist
+DB.prototype.count = function(type){
+  if(type !== undefined && this.data[type] !== undefined){
+    return Object.keys(this.data[type]).length;
+  }
+}

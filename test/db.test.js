@@ -10,6 +10,7 @@ const DB = require('../src/db');
 describe('DB', function(){
   describe('store', storeSpec);
   describe('fetch', fetchSpec);
+  describe('count', countSpec);
 });
 
 
@@ -71,5 +72,25 @@ function fetchSpec(){
   it('returns undefined if args are undefined', function(){
     expect(cache.fetch()).to.be.undefined;
     expect(cache.fetch('stuff')).to.be.undefined;
+  });
+}
+
+
+function countSpec(){
+
+  let cache = new DB();
+  cache.store('stuff', { id: 'cow'});
+  cache.store('stuff', { id: 'cat'});
+
+  it('it returns number of items for given type', function(){
+    expect(cache.count('stuff')).to.equal(2);
+  });
+
+  it('it returns undefined if given type does not exist', function(){
+    expect(cache.count('things')).to.be.undefined;
+  });
+
+  it('it returns undefined if args are undefined', function(){
+    expect(cache.count()).to.be.undefined;
   });
 }
