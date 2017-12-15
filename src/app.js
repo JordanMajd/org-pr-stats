@@ -21,7 +21,8 @@ let orgName = process.env.GH_ORG;
 client.get('orgs/' + orgName)
   .then(getReposForOrg)
   .then(getLatestPullFromRepos);
-  .then();
+  .then(getPullsFromRepos)
+  .catch(handleErr);
 
 
 function getReposForOrg(org){
@@ -42,7 +43,11 @@ function getLatestPullFromRepos(repos){
 }
 
 function getPullsFromRepos(stuff){
+  console.log(stuff);
+}
 
+function handleErr(err){
+  console.error(err);
 }
 
 
