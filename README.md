@@ -12,8 +12,9 @@ There are two ways to run the application, directly on your machine or in a dock
 1. Navigate into the repo `cd org-pr-stats`.
 1. Set up a `.env` file with the name of the github organization to query.
   - Copy the example `.env` file: `cp .env.example .env`
-  - Change `.env`'s contents from `GH_ORG="servo"` to `GH_ORG="<YOUR ORG HERE>"`.
-  - Change `.env`'s user from `GH_USER="octocat"` to `GH_USER="<YOUR USER NAME HERE>"`.
+  - Change `GH_ORG="servo"` to `GH_ORG="<YOUR ORG HERE>"`.
+  - Change `GH_USER="octocat"` to `GH_USER="<YOUR USER NAME HERE>"`.
+  - Change `GH_OAUTH="yourtoken"` to `GH_OAUTH="<YOUR OAUTH TOKEN HERE">`. (You'll need to create a personal access token in your [developer settings][dev])
 
 ### Direct
 
@@ -43,3 +44,4 @@ To run the unit tests use the command `npm test`.
 
 [node]: https://nodejs.org/en/
 [gh]: https://developer.github.com/v3/
+[dev]: https://github.com/settings/tokens/new

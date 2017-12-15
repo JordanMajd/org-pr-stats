@@ -1,5 +1,9 @@
 'use strict';
 
+// configure environment variables from .env
+// ensure this runs before anything else
+require('dotenv').config();
+
 const expect = require('chai').expect;
 const DB = require('../src/db');
 

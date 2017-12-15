@@ -20,7 +20,8 @@ let orgName = process.env.GH_ORG;
 
 client.get('orgs/' + orgName)
   .then(getReposForOrg)
-  .then(getPullsFromRepos);
+  .then(getLatestPullFromRepos);
+  .then();
 
 
 function getReposForOrg(org){
@@ -28,10 +29,23 @@ function getReposForOrg(org){
   return client.getPaginated('orgs/' + orgName + '/repos', org.public_repos);
 }
 
-function getPullsFromRepos(repos){
+function getLatestPullFromRepos(repos){
   return Promise.map(repos, function(repo){
+
     db.store('repo', repo);
-    let uri = repo.url + '/pulls';
-    return client.getPaginated(uri); //todo update so doesn't need end number
+
+    let uri = repo.url + '/pulls' + '?state=all&direction=desc';
+
+    return client.get(uri); //todo update so doesn't need end number
+
   });
 }
+
+function getPullsFromRepos(stuff){
+
+}
+
+
+// get repos for org
+// get top pr # for repo
+// batch

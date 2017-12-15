@@ -11,7 +11,8 @@ function GHClient(){
   this.opts = {
     uri: 'https://api.github.com/',
     headers: {
-      'User-Agent': process.env.GH_USER
+      'User-Agent': process.env.GH_USER,
+      'Authorization': 'token ' + process.env.GH_OAUTH
     },
     json: true
   };
