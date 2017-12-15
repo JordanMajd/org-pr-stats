@@ -25,33 +25,33 @@ client.get('orgs/' + orgName)
   .then(getPullCount)
   .catch(handleErr);
 
-function getReposForOrg(org){
+function getReposForOrg(org) {
   db.store('orgs', org);
   return client.getPaginated('orgs/' + orgName + '/repos');
 }
 
-function getPullsForRepos(repos){
+function getPullsForRepos(repos) {
 
-  return Promise.map(repos, function(repo){
+  return Promise.map(repos, function(repo) {
 
     db.store('repo', repo);
 
     let uri = 'repos/' + orgName + '/' + repo.name + '/pulls';
 
-    return client.getPaginated(uri, '&state=all').then(function(pulls){
+    return client.getPaginated(uri, '&state=all').then(function(pulls) {
       pulls = flatten(pulls);
-      pulls.forEach(function(pull){
+      pulls.forEach(function(pull) {
         db.store('pull', pull);
       });
     });
   });
 }
 
-function getPullCount(pulls){
+function getPullCount(pulls) {
   console.log('There are ' + db.count('pull') + ' pull requests for ' + orgName);
 }
 
-function handleErr(err){
+function handleErr(err) {
   console.error('Something went wrong:');
   console.error(err);
 }

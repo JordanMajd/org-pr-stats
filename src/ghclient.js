@@ -8,7 +8,7 @@ const flatten = require('./util').flatten;
 /* Exports */
 module.exports = GHClient;
 
-function GHClient(){
+function GHClient() {
   this.opts = {
     uri: 'https://api.github.com/',
     headers: {
@@ -20,7 +20,7 @@ function GHClient(){
 }
 
 // Returns a promise with the item
-GHClient.prototype.get = function(uri){
+GHClient.prototype.get = function(uri) {
   let opts = Object.assign({}, this.opts);
   opts.uri += uri;
   return rp(opts);
@@ -28,11 +28,9 @@ GHClient.prototype.get = function(uri){
 
 
 // Returns a promise with an array of the paginated results
-GHClient.prototype.getPaginated = function(uri, arg){
+GHClient.prototype.getPaginated = function(uri, arg) {
 
-  let perPage = 100;
-
-  if(arg === undefined){
+  if (arg === undefined) {
     arg = '';
   }
 
@@ -43,8 +41,7 @@ GHClient.prototype.getPaginated = function(uri, arg){
     // get number of pages
     // if link is undefined, assume 1 page
     let pageCount = 1;
-    console.log(res.headers.link);
-    if(res.headers.link !== undefined){
+    if (res.headers.link !== undefined) {
       pageCount = this.getLastPage(res.headers.link);
     }
 
@@ -52,33 +49,31 @@ GHClient.prototype.getPaginated = function(uri, arg){
     let pullRequests = [];
 
     // Start at page 1, pageCount is inclusive.
-    for(let i = 1; i <= pageCount; i++){
+    for (let i = 1; i <= pageCount; i++) {
 
-      let path = uri + '?page=' + i + '&per_page=' + perPage + arg;
+      let path = uri + '?page=' + i + '&per_page=100' + arg;
 
-      let chain = this.get(path).then(function(pulls){
+      let chain = this.get(path).then(function(pulls) {
         pullRequests.push(pulls);
       });
 
       promises.push(chain);
     }
 
-    return Promise.all(promises).then(function(){
+    return Promise.all(promises).then(function() {
       return flatten(pullRequests);
     });
   });
 };
 
-GHClient.prototype.head = function(uri, arg){
+GHClient.prototype.head = function(uri, arg) {
   let opts = Object.assign({}, this.opts);
   opts.uri += uri + '?per_page=100' + arg;
-  opts.resolveWithFullResponse = true
-  console.log('head');
-  console.log(opts.uri);
+  opts.resolveWithFullResponse = true;
   return rp.head(opts);
 };
 
-GHClient.prototype.getLastPage = function(link){
+GHClient.prototype.getLastPage = function(link) {
   // search link header for last page
   let last = link.split(',')[1];
   let page = last.match(/(\?|&)page=(\d+)/g)[0];
