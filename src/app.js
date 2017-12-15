@@ -18,48 +18,43 @@ let client = new GHClient();
 let db = new DB();
 let orgName = process.env.GH_ORG;
 
-// client.get('orgs/' + orgName)
-//   .then(getReposForOrg)
-//   .then(getLatestPullFromRepos)
-//   // .then(getPullsFromRepos)
-//   .then(getPullCount)
-//   .catch(handleErr);
-
-client.head('repos/ramda/ramda/pulls').then(function(res){
-  console.log(res.headers.link);
-  console.log(parseLink(res.headers.link);
-});
-
-function parseLink(link){
-  return /(?=)\d(?=>; rel="last")/g.match(link);
-}
-
+client.get('orgs/' + orgName)
+  .then(getReposForOrg)
+  .then(getPullsForRepos)
+  .then(getPullsFromRepos)
+  .then(getPullCount)
+  .catch(handleErr);
 
 function getReposForOrg(org){
   db.store('orgs', org);
-  return client.getPaginated('orgs/' + orgName + '/repos', org.public_repos);
+  return client.getPaginated('orgs/' + orgName + '/repos');
 }
 
-function getLatestPullFromRepos(repos){
+function getPullsForRepos(repos){
 
   return Promise.map(repos, function(repo){
 
     db.store('repo', repo);
 
-    let uri = 'repos/' + orgName + '/' + repo.name + '/pulls' + '?state=all&direction=desc';
+    let uri = 'repos/' + orgName + '/' + repo.name + '/pulls' + '?state=all';
 
-    return client.get(uri).then(function(data, header){
-      console.log(data);
+    return client.getPaginated(uri).then(function(data){
+      return [].concat.apply([], data);
     });
-
   });
 }
 
-// function getPullsFromRepos(data){
-//
-//   data.forEach()
-//
-// }
+function storePulls(pulls){
+
+  return new Promise(function(reject, resolve){
+
+    pulls.forEach(function(pull){
+      db.store('pull', pull);
+    });
+
+    resolve();
+  });
+}
 
 function getPullCount(){
   console.log('There are ' + db.count('pull') + ' pull requests for ' + orgName);
